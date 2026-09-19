@@ -15,12 +15,26 @@ setInterval('autoRefresh()',6000 );
 </script>
 <header>
 
-
-
-
-
-
 <button id="open">Go to Google</button>
+<!-- Your existing button -->
+
+
+<!-- Add your new buttons below it -->
+<button id="btnSecond">The Overwatch Button!</button>
+<button id="btnThird">Third Button</button>
+<script>
+ 
+
+  // Setup the action for the second button
+  document.getElementById("btnSecond").addEventListener("click", function() {
+   window.open("https://overwatch.blizzard.com/en-us/", "_blank");
+  });
+
+  // Setup the action for the third button
+  document.getElementById("btnThird").addEventListener("click", function() {
+    alert("Third button was clicked!");
+  });
+</script>
 
 <script>
   document.getElementById("open").addEventListener("click", function () {
@@ -28,10 +42,3 @@ setInterval('autoRefresh()',6000 );
   });
 </script>
 
-<button id="open">The Overwatch Button !</button>
-
-<script>
-  document.getElementById("open").addEventListener("click", function () {
-    window.open("https://www.overwatch.blizzard.com", "_blank");
-  });
-</script>
