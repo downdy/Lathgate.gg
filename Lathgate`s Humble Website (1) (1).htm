@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
+    <title>Lathgates humble website </title>
+</head>
+<body>
+    <!-- Inline style attribute -->
+    <p style="color: ;yellow">
+ Welcome to Lathgate`s humble website!(Local Host From File )
+</body>
+</html>
+<head>
+<style>
+body {
+  background-color: aqua;
+}
+</style>
+</head>
+<text>
+<script>
+function autoRefresh() {
+   window.location = window.location.href;
+}
+setInterval('autoRefresh()',6000 );
+</script>
+<header>
+
+<button id="open">Go to Google</button>
+<!-- Your existing button -->
+
+
+<!-- Add your new buttons below it -->
+<button id="btnSecond">The Overwatch Button!</button>
+<button id="btnThird">Third Button</button>
+<script>
+ 
+
+  // Setup the action for the second button
+  document.getElementById("btnSecond").addEventListener("click", function() {
+   window.open("https://overwatch.blizzard.com/en-us/", "_blank");
+  });
+
+  // Setup the action for the third button
+  document.getElementById("btnThird").addEventListener("click", function() {
+    alert("Third button was clicked!");
+  });
+</script>
+
+<script>
+  document.getElementById("open").addEventListener("click", function () {
+    window.open("https://google.com", "_blank");
+  });
+</script>
+
