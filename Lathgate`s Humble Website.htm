@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+  .button-container {
+    display: flex;
+    justify-content: center; /* Centers buttons horizontally */
+    gap: 10px;               /* Adds space between the buttons */
+  }
+</style>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet">
     <title>Lathgates humble website </title>
 </head>
 <body>
-    <!-- Inline style attribute -->
+<div class="button-container">
+  <button>Go to Google</button>
+  <button>The Overwatch Button!</button>
+  <button>Dummy.button</button>
+</div>
+    
+<!-- Inline style attribute -->
     <p style="color: ;yellow">
  Welcome to Lathgate`s humble website!(Local Host From File )
 </body>
@@ -29,34 +43,4 @@ function autoRefresh() {
 setInterval('autoRefresh()',6000 );
 </script>
 <header>
-
-<button id="open">Go to Google</button>
-<!-- Your existing button -->
-
-<!-- Add your new buttons below it -->
-<button id="btnSecond">The Overwatch Button!</button>
-<button id="btnThird">Dummy.button</button>
-<script>
- 
-
-  // Setup the action for the second button
-  document.getElementById("btnSecond").addEventListener("click", function() {
-   window.open("https://overwatch.blizzard.com/en-us/", "_blank");
-  });
-
-  // Setup the action for the third button
-  document.getElementById("btnThird").addEventListener("click", function() {
-    alert("dummy.string ");
-  });
-</script>
-
-<script>
-  document.getElementById("open").addEventListener("click", function () {
-    window.open("https://google.com", "_blank");
-  });
-</script>
-
-
-
-
 
