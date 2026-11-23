@@ -1,0 +1,44 @@
+<head>
+<style>
+body {
+  background-color: blue;
+}
+</style>
+</head>
+<text>
+ Welcome to Lathgate`s humble website!(Local Host From File )
+
+<script>
+function autoRefresh() {
+   window.location = window.location.href;
+}
+setInterval('autoRefresh()',6000 );
+</script>
+<header>
+
+<button id="open">Go to Google</button>
+<!-- Your existing button -->
+
+
+<!-- Add your new buttons below it -->
+<button id="btnSecond">The Overwatch Button!</button>
+<button id="btnThird">The Mystery Button</button>
+<script>
+ 
+
+  // Setup the action for the second button
+  document.getElementById("btnSecond").addEventListener("click", function() {
+   window.open("https://overwatch.blizzard.com/en-us/", "_blank");
+  });
+
+  // Setup the action for the third button
+  document.getElementById("btnThird").addEventListener("click", function() {
+    alert("What do YOU think this button should do ?");
+  });
+</script>
+
+<script>
+  document.getElementById("open").addEventListener("click", function () {
+    window.open("https://google.com", "_blank");
+  });
+</script>
