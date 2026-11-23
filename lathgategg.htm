@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lathgate.gg</title>
+  <style>
+    body, button { margin: 0; font-family: 'Ubuntu', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body {
+      --bg: #1e1e2e; --text: #ffffff; --sub: #cccccc; --mut: #888899;
+      --sb: rgba(31,31,31,0.92); --bd: rgba(255,255,255,0.08); --hv: rgba(255,255,255,0.1);
+      --ac: #9e9e9e; --kb: #1e1e2e;
+      background: var(--bg); color: var(--text); transition: 0.25s;
+    }
+    body.th-oled { --bg: #000; --text: #f5f5f5; --sub: #b0b0b0; --mut: #666; --sb: rgba(15,15,15,0.95); --bd: rgba(255,255,255,0.12); --hv: rgba(255,255,255,0.12); --ac: #fff; --kb: #000; }
+    body.th-nord { --bg: #2e3440; --text: #eceff4; --sub: #d8dee9; --mut: #81a1c1; --sb: rgba(36,41,51,0.95); --bd: rgba(216,222,233,0.12); --hv: rgba(136,192,208,0.16); --ac: #88c0d0; --kb: #2e3440; }
+    body.th-light { --bg: #f3f4f6; --text: #111827; --sub: #4b5563; --mut: #6b7280; --sb: rgba(255,255,255,0.95); --bd: rgba(0,0,0,0.1); --hv: rgba(0,0,0,0.07); --ac: #374151; --kb: #fff; }
+    body.th-synth { --bg: #1a1025; --text: #fdf4ff; --sub: #e9d5ff; --mut: #c084fc; --sb: rgba(24,14,36,0.95); --bd: rgba(216,180,254,0.15); --hv: rgba(244,114,182,0.18); --ac: #f472b6; --kb: #1a1025; }
+    body.th-matrix { --bg: #050a05; --text: #4ade80; --sub: #22c55e; --mut: #15803d; --sb: rgba(5,15,5,0.95); --bd: rgba(74,222,128,0.2); --hv: rgba(74,222,128,0.12); --ac: #4ade80; --kb: #050a05; }
+
+    .wrap { min-height: 100vh; padding: 30px 20px 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .m-btn { position: fixed; top: 20px; left: 20px; display: inline-flex; padding: 10px; color: var(--text); border-radius: 6px; cursor: pointer; z-index: 2000; user-select: none; }
+    .m-btn:hover { background: var(--hv); }
+    .ham { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5; fill: none; pointer-events: none; }
+    .ham line { transition: 0.3s; transform-origin: left center; }
+    body.menu-open .mid { transform: scaleX(0.75); }
+    .bg-ov { position: fixed; inset: 0; display: none; background: rgba(0,0,0,0.35); z-index: 1000; }
+    body.menu-open .bg-ov { display: block; }
+
+    .sb { position: fixed; top: 0; left: 0; width: 250px; height: 100dvh; transform: translateX(-100%); background: var(--sb); backdrop-filter: blur(20px); border-right: 1px solid var(--bd); padding: 75px 0 15px; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; transition: transform 0.3s ease; z-index: 1500; }
+    body.menu-open .sb { transform: translateX(0); }
+
+    .cog-btn { position: absolute; top: 20px; right: 20px; display: inline-flex; padding: 10px; color: var(--text); border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+    .cog-btn:hover { background: var(--hv); }
+    .cog-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; transition: transform 0.4s ease; }
+    .cog-btn:hover svg { transform: rotate(60deg); }
+    .cog-btn.active { background: var(--hv); color: var(--ac); }
+
+    .sb a, .nav-l { position: relative; display: flex; align-items: center; padding: 15px 25px; text-decoration: none; font-size: 16px; color: var(--text); cursor: pointer; transition: 0.2s; }
+    .sb a:hover, .nav-l:hover { background: var(--hv); padding-left: 29px; }
+    .nav-l.active::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: var(--ac); }
+    #nav-dev { display: none; }
+    body.dev-on #nav-dev { display: flex; }
+
+    .page { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 800px; }
+    .page.active { display: flex; }
+
+    .sb-th { margin-top: auto; padding: 14px 25px; border-top: 1px solid var(--bd); display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .sb-th span { font-size: 12px; color: var(--mut); text-transform: uppercase; }
+    .sw-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .sw-b { display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bd); cursor: pointer; transition: 0.2s; box-sizing: border-box; }
+    .sw-b.active { border-color: var(--ac); transform: scale(1.18); }
+
+    .dev-w { padding: 15px 25px; border-top: 1px solid var(--bd); display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--sub); cursor: pointer; user-select: none; }
+    .dev-w:hover { background: var(--hv); color: var(--text); }
+    .dev-t { opacity: 0; transform: translateX(-6px); transition: 0.2s; }
+    .dev-w:hover .dev-t { opacity: 1; transform: translateX(0); }
+    .sw { position: relative; width: 36px; height: 18px; }
+    .sl { position: absolute; inset: 0; border: 1.5px solid var(--ac); border-radius: 18px; transition: 0.2s; }
+    .sl::before { content: ""; position: absolute; height: 10px; width: 10px; left: 3px; bottom: 2.5px; background: var(--text); border-radius: 50%; transition: 0.2s; }
+    body.dev-on .sl { background: var(--ac); }
+    body.dev-on .sl::before { transform: translateX(17px); background: var(--kb); }
+
+    .set-box { width: 100%; max-width: 440px; background: var(--hv); border: 1px solid var(--bd); border-radius: 8px; padding: 18px; margin-bottom: 16px; box-sizing: border-box; text-align: left; }
+    .set-box h2 { font-size: 14px; text-transform: uppercase; color: var(--mut); margin: 0 0 12px; letter-spacing: 0.5px; }
+    .th-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .th-card { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; border: 1px solid var(--bd); cursor: pointer; font-size: 14px; transition: 0.2s; }
+    .th-card:hover { background: var(--hv); }
+    .th-card.active { border-color: var(--ac); background: var(--hv); font-weight: 700; }
+    .dot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--bd); flex-shrink: 0; }
+    .pick-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
+    .pick-row input[type="color"] { background: none; border: 1px solid var(--bd); width: 42px; height: 28px; cursor: pointer; border-radius: 4px; }
+
+    h1 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
+    p { font-size: 14px; margin: 0 0 15px; color: var(--sub); }
+    .btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+    #links-page .btns { flex-direction: column; align-items: center; }
+    .btns button, .btns a { padding: 10px 16px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; background: transparent; border: none; border-radius: 6px; cursor: pointer; transition: 0.25s; box-sizing: border-box; }
+    #links-page a { width: 180px; }
+    #dev-page button, #settings-page button { min-width: 180px; background: var(--hv); border: 1px solid var(--bd); }
+    .btns button:hover, .btns a:hover { background: var(--hv); transform: translateY(-2px); }
+    footer { margin-top: auto; padding: 20px; font-size: 13px; font-weight: 300; color: var(--mut); }
+    body.is-mobile .wrap { padding-top: 70px; }
+    body.is-mobile h1 { font-size: 18px; line-height: 1.4; }
+    body.is-mobile .btns { flex-direction: column; width: 100%; max-width: 300px; }
+    body.is-mobile .btns button, body.is-mobile .btns a, body.is-mobile #links-page a { width: 100%; padding: 14px 16px; background: var(--hv); border: 1px solid var(--bd); }
+    body.is-mobile .dev-t { opacity: 1; transform: translateX(0); }
+    body.is-mobile .th-grid { grid-template-columns: 1fr; }
+  </style>
+  <script>
+    var ico = document.createElement("link");
+    ico.rel = "icon"; ico.type = "image/png"; ico.href = "fox" + ".png";
+    document.head.appendChild(ico);
+
+    var THEMES = ["default", "oled", "nord", "light", "synth", "matrix"];
+    function setStore(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function getStore(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+    function pickPage(page) {
+      ["home", "links", "dev", "settings"].forEach(function(p) {
+        var pageEl = document.getElementById(p + "-page");
+        var navEl = document.getElementById("nav-" + p);
+        if (pageEl) pageEl.classList.toggle("active", p === page);
+        if (navEl) navEl.classList.toggle("active", p === page);
+      });
+      setStore("lathgate_page", page);
+      document.body.classList.remove("menu-open");
+    }
+
+    function pickTheme(theme) {
+      THEMES.forEach(function(t) { document.body.classList.remove("th-" + t); });
+      if (theme !== "default") document.body.classList.add("th-" + theme);
+      THEMES.forEach(function(t) {
+        var b1 = document.getElementById("b-" + t);
+        var b2 = document.getElementById("card-" + t);
+        if (b1) b1.classList.toggle("active", t === theme);
+        if (b2) b2.classList.toggle("active", t === theme);
+      });
+      document.body.style.removeProperty("--bg");
+      document.body.style.removeProperty("--ac");
+      try { localStorage.removeItem("lathgate_custom_--bg"); localStorage.removeItem("lathgate_custom_--ac"); } catch (e) {}
+      setStore("lathgate_theme", theme);
+    }
+
+    function setCustomColor(prop, val) {
+      document.body.style.setProperty(prop, val);
+      setStore("lathgate_custom_" + prop, val);
+    }
+
+    function toggleDev(force) {
+      var isOn = typeof force === "boolean" ? force : !document.body.classList.contains("dev-on");
+      document.body.classList.toggle("dev-on", isOn);
+      setStore("lathgate_dev", isOn);
+      if (!isOn && document.getElementById("dev-page").classList.contains("active")) pickPage("home");
+    }
+
+    function detectDevice() {
+      var info = document.getElementById("dev-device-info");
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+      document.body.classList.toggle("is-mobile", isMobile);
+      document.body.classList.toggle("is-desktop", !isMobile);
+      if (info) info.textContent = "Device Info: " + (isMobile ? "Mobile" : "Desktop") + " (" + window.innerWidth + "x" + window.innerHeight + "px)";
+    }
+
+    window.addEventListener("DOMContentLoaded", function() {
+      var t = getStore("lathgate_theme"); if (t) pickTheme(t);
+      var cBg = getStore("lathgate_custom_--bg");
+      var cAc = getStore("lathgate_custom_--ac");
+      if (cBg) { document.body.style.setProperty("--bg", cBg); document.getElementById("cp-bg").value = cBg; }
+      if (cAc) { document.body.style.setProperty("--ac", cAc); document.getElementById("cp-ac").value = cAc; }
+      var d = getStore("lathgate_dev") === "true"; toggleDev(d);
+      var p = getStore("lathgate_page"); if (p && (p !== "dev" || d)) pickPage(p);
+      detectDevice();
+    });
+    window.addEventListener("resize", detectDevice);
+  </script>
+</head>
+<body>
+  <div class="bg-ov" onclick="document.body.classList.remove('menu-open')"></div>
+  <div class="m-btn" onclick="document.body.classList.toggle('menu-open')">
+    <svg class="ham" viewBox="0 0 18 18"><line x1="1" y1="4.5" x2="17" y2="4.5"/><line class="mid" x1="1" y1="9" x2="17" y2="9"/><line x1="1" y1="13.5" x2="17" y2="13.5"/></svg>
+  </div>
+  <div class="sb" id="sidebar">
+    <div id="nav-settings" class="cog-btn" title="Settings" onclick="pickPage('settings')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </div>
+    <div id="nav-home" class="nav-l active" onclick="pickPage('home')">Home</div>
+    <div id="nav-links" class="nav-l" onclick="pickPage('links')">Friends &amp; Links</div>
+    <a href="https://youtube.com" target="_blank" onclick="document.body.classList.remove('menu-open')">About &amp; Contact</a>
+    <div id="nav-dev" class="nav-l" onclick="pickPage('dev')">Dev Tools</div>
+    <div class="sb-th">
+      <span>Quick Theme</span>
+      <div class="sw-row">
+        <span id="b-default" class="sw-b active" style="background:#1e1e2e" title="Default Dark" onclick="pickTheme('default')"></span>
+        <span id="b-oled" class="sw-b" style="background:#000000" title="Midnight OLED" onclick="pickTheme('oled')"></span>
+        <span id="b-nord" class="sw-b" style="background:#2e3440" title="Nord Frost" onclick="pickTheme('nord')"></span>
+        <span id="b-light" class="sw-b" style="background:#f3f4f6" title="Clean Light" onclick="pickTheme('light')"></span>
+        <span id="b-synth" class="sw-b" style="background:#1a1025" title="Sunset Synth" onclick="pickTheme('synth')"></span>
+        <span id="b-matrix" class="sw-b" style="background:#050a05" title="Matrix Terminal" onclick="pickTheme('matrix')"></span>
+      </div>
+    </div>
+    <div class="dev-w" onclick="toggleDev()"><span class="sw"><span class="sl"></span></span><span class="dev-t">Dev Mode</span></div>
+  </div>
+  <div class="wrap">
+    <div id="home-page" class="page active">
+      <h1> welcome to Lathgate.gg ! </h1>
+      <p>this is a string of test text</p>
+      <div class="btns">
+        <a href="https://google.com" target="_blank">Go to Google</a>
+        <a href="https://playoverwatch.com" target="_blank">The Overwatch Button!</a>
+        <button type="button" onclick="alert(' dummy. string ')">Dummy.button</button>
+      </div>
+    </div>
+    <div id="links-page" class="page">
+      <h1>Friends &amp; Links</h1>
+      <div class="btns">
+        <a href="https://example.com" target="_blank">Nogwater`s website</a>
+        <a href="https://discord.com" target="_blank">Discord!</a>
+      </div>
+    </div>
+    <div id="settings-page" class="page">
+      <h1>Settings</h1>
+      <p>Personalize your theme and colors</p>
+      <div class="set-box">
+        <h2>Theme Presets</h2>
+        <div class="th-grid">
+          <div id="card-default" class="th-card active" onclick="pickTheme('default')"><span class="dot" style="background:#1e1e2e"></span>Default Dark</div>
+          <div id="card-oled" class="th-card" onclick="pickTheme('oled')"><span class="dot" style="background:#000000"></span>Midnight OLED</div>
+          <div id="card-nord" class="th-card" onclick="pickTheme('nord')"><span class="dot" style="background:#2e3440"></span>Nord Frost</div>
+          <div id="card-light" class="th-card" onclick="pickTheme('light')"><span class="dot" style="background:#f3f4f6"></span>Clean Light</div>
+          <div id="card-synth" class="th-card" onclick="pickTheme('synth')"><span class="dot" style="background:#f472b6"></span>Sunset Synth</div>
+          <div id="card-matrix" class="th-card" onclick="pickTheme('matrix')"><span class="dot" style="background:#4ade80"></span>Matrix Terminal</div>
+        </div>
+      </div>
+      <div class="set-box">
+        <h2>Custom Color Overrides</h2>
+        <div class="pick-row"><span>Background Color</span><input type="color" id="cp-bg" value="#1e1e2e" oninput="setCustomColor('--bg', this.value)"></div>
+        <div class="pick-row"><span>Accent Color</span><input type="color" id="cp-ac" value="#9e9e9e" oninput="setCustomColor('--ac', this.value)"></div>
+        <div class="btns" style="margin-top:10px;"><button type="button" onclick="document.body.style.removeProperty('--bg'); document.body.style.removeProperty('--ac'); try{localStorage.removeItem('lathgate_custom_--bg'); localStorage.removeItem('lathgate_custom_--ac');}catch(e){} document.getElementById('cp-bg').value='#1e1e2e'; document.getElementById('cp-ac').value='#9e9e9e';">Reset Custom Colors</button></div>
+      </div>
+    </div>
+    <div id="dev-page" class="page">
+      <h1>Dev Tools</h1>
+      <p>Local host testing utilities</p>
+      <p id="dev-device-info">Device Info: Loading...</p>
+      <div class="btns">
+        <button type="button" onclick="location.reload()">Refresh Now</button>
+        <button type="button" onclick="try{localStorage.clear();}catch(e){} location.reload();">Reset Saved Settings</button>
+      </div>
+    </div>
+    <footer>crafted with goldfish crackers, patience, and a whole lot of advanced copy pasting</footer>
+  </div>
+</body>
+</html>
