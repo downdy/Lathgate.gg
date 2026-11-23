@@ -1,43 +1,24 @@
 
+Lathgate.gg
+
+A lightweight, zero-dependency personal website and local network (LAN) hub featuring a single-file HTML/CSS/JS frontend, custom themes, a shared editable LAN guestbook, and a native Windows PowerShell system tray server.
+
+Features
+
+• Zero External Dependencies: Single-file frontend (lathgategg.htm) with custom SVG icons and dynamic favicon injection.
+• Custom Themes & Live Overrides: Includes 6 built-in themes (Default Dark, Midnight OLED, Nord Frost, Clean Light, Sunset Synth, and Matrix Terminal) plus custom background and accent color pickers saved to localStorage.
+• Responsive Mobile & Desktop UI: Automatically detects mobile vs. desktop viewports, adapts button layouts, and supports real-time touch swipe gestures for the slide-out navigation sidebar.
+• Shared Editable LAN Guestbook: Built-in message wall backed by /api/guestbook (guestbook.json) with full post, edit, delete, and Enter-to-send support for devices on the same Wi-Fi network.
+• System Tray Server: Runs silently in the Windows System Tray (tray-server.ps1) on Port 80 with a custom fox icon (fox.ico) and quick controls to open or stop the server.
+
 1. Folder & File Placement
 
-• Create a folder on your Windows Desktop named lathgate.gg (%USERPROFILE%\Desktop\lathgate.gg).
-• Place the core files inside the root: lathgategg.htm, tray-server.ps1, Start lathgate.bat, fox.png, and fox.ico.
-• Optional files include a legacy/ backup archive folder and an auto-generated guestbook.json.
+• Set up a root folder named lathgate.gg on your Windows Desktop (%USERPROFILE%\Desktop\lathgate.gg).
+• Add the essential files to the directory: lathgategg.htm, tray-server.ps1, Start lathgate.bat, fox.png, and fox.ico.
+• Optionally include a legacy/ backup archive folder and a guestbook.json data file.
 
-2. One-Time Windows Port 80 & mDNS Setup
+. One-Time Windows Port 80 & mDNS Setup
 
 Open Command Prompt as Administrator and run the following commands individually:
 • Allow PowerShell on Port 80:
-
-cmd netsh http add urlacl url=http://+:80/ sddl=D:(A;;GX;;;S-1-1-0)
-
-• Open Port 80 in Windows Defender Firewall: 
-cmd netsh advfirewall firewall add rule name="Lathgate Port 80" dir=in action=allow protocol=TCP localport=80
-
-• Enable Windows mDNS Responder:
-cmd reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v EnableMDNS /t REG_DWORD /d 1 /f
-
-
-3. Windows Network Profile & PC Hostname
-
-1. Set Network to Private: Go to Win + I > Network & internet > click your connection and set Network profile type to Private.
-2. Rename PC: Go to settings> System > About > click Rename this PC, set it to lathgate, and Restart now.
-
-4. Starting the Server & Accessing the Site
-
-• Start Manually: Double-click Start lathgate.bat to run tray-server.ps1 in the background with the system tray icon.
-• Tray Controls: Double-click the fox icon to open http://localhost/, or right-click to access server options.
-• Access URLs: Use http://localhost/ or http://lathgate.local locally and from devices on the same Wi-Fi.
-
-5. Auto-Start on Windows Boot
-
-1. Create a shortcut of Start lathgate.bat and assign fox.ico via its Properties.
-2. Press Win + R, type shell:startup, and place the shortcut inside the opened Startup folder.
-
-6. Troubleshooting
-
-• DNS_PROBE_FINISHED_NXDOMAIN: Confirm your PC hostname is lathgate, your network profile is Private, and flush your DNS via ipconfig /flushdns.
-• Port 80 in Use: Run 
-netstat -ano | findstr :80 to identify conflicting applications.
-• Guestbook Issues: Ensure you access the app via http://localhost/ or http://lathgate.local rather than a direct file:/// path.
+To complete the Windows Port 80, firewall, Bonjour service configuration, and the remaining setup steps for network profiles, server launching, auto-start, and troubleshooting, please refer to the configuration instructions and setup guide 
