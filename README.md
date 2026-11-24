@@ -1,7 +1,7 @@
 
-Lathgate.gg
+Lathgate.gg 
 
-A lightweight, zero-dependency personal website and local network (LAN) hub featuring a single-file HTML/CSS/JS frontend, custom themes, a shared editable LAN guestbook, built-in arcade and multiplayer LAN games, and a native Windows PowerShell system tray server.
+A lightweight, zero-dependency personal website and local network (LAN) hub featuring a single-file HTML/CSS/JS frontend, custom themes, a shared editable LAN guestbook, built-in arcade and multiplayer LAN games, a Dev Mode LAN clipboard, and a native Windows PowerShell system tray server.
 
 Features
 
@@ -10,7 +10,8 @@ Features
 • Responsive Mobile & Desktop UI: Adapts automatically to mobile and desktop viewports with touch swipe gestures for the slide-out navigation sidebar.
 • Shared Editable LAN Guestbook: Message wall backed by /api/guestbook (guestbook.json) with post, edit, delete, and Enter-to-send support for devices on the same Wi-Fi network.
 • Games & Shared LAN Records: Separate popup modals for Snake, Reaction Timer, and 2-Player LAN Tic-Tac-Toe, backed by /api/scores (scores.json) and /api/ttt (ttt.json).
-• Smart System Tray Server: Runs silently in the Windows System Tray (tray-server.ps1) on Port 80, displaying both http://lathgate.local and your active LAN IP (http://<LAN-IP>/) with one-click open and copy controls.
+• Dev Tools & LAN Clipboard: Toggleable Dev Mode in Settings unlocking viewport diagnostics and a shared LAN Clipboard (/api/clip, clip.json) to send, fetch, and copy links or text between your PC and phone.
+• Smart System Tray Server: Runs silently in the Windows System Tray (tray-server.ps1) on Port 80, automatically detecting your active LAN IP (http://<LAN-IP>/) alongside http://lathgate.local with one-click open and copy controls.
 
 1. Folder & File Placement
 
@@ -19,23 +20,23 @@ Create a folder on your Windows Desktop named lathgate.gg (%USERPROFILE%\Desktop
 • tray-server.ps1 — PowerShell HTTP listener, JSON APIs, and System Tray controller
 • Start lathgate.bat — Silent launcher for tray-server.ps1
 • fox.png & fox.ico — Browser favicon and System Tray icon
-• guestbook.json, scores.json, ttt.json — Auto-generated local JSON storage files
+• guestbook.json, scores.json, ttt.json, clip.json — Auto-generated local JSON storage files
 
 2. One-Time Windows Port 80 & mDNS Setup
 
 Open Command Prompt as Administrator and run these commands individually:
 • Allow PowerShell to listen on Port 80:cmd
 netsh http add urlacl url=http://+:80/ sddl=D:(A;;GX;;;S-1-1-0)
-
+Use code with caution.
 • Open Port 80 in Windows Defender Firewall:cmd
 netsh advfirewall firewall add rule name="Lathgate Port 80" dir=in action=allow protocol=TCP localport=80
-
+Use code with caution.
 • Enable Windows mDNS & Install Apple Bonjour (for .local resolution on phones):cmd
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters" /v EnableMDNS /t REG_DWORD /d 1 /f
-
+Use code with caution.
 cmd
 winget install --id Apple.BonjourPrintServices -e
-
+Use code with caution.
 
 3. Windows Network Profile & PC Hostname
 
@@ -51,4 +52,4 @@ winget install --id Apple.BonjourPrintServices -e
 5. Auto-Start on Windows Boot
 
 1. Right-click Start lathgate.bat > Create shortcut (assign fox.ico in Properties > Change Icon).
-2. Press Win + R, type shell:startup, and move the shortcut into that folder.
+2. Press Win + R, type shell:startup, and move the shortcut into that folder
