@@ -5,19 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lathgate.gg</title>
   <style>
-    body, button { margin: 0; font-family: 'Ubuntu', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-    body {
-      --bg: #1e1e2e; --text: #ffffff; --sub: #cccccc; --mut: #888899;
-      --sb: rgba(31,31,31,0.92); --bd: rgba(255,255,255,0.08); --hv: rgba(255,255,255,0.1);
-      --ac: #9e9e9e; --kb: #1e1e2e;
-      background: var(--bg); color: var(--text); transition: 0.25s;
-    }
+    body, button, input, textarea { margin: 0; font-family: 'Ubuntu', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+    body { --bg: #1e1e2e; --text: #ffffff; --sub: #cccccc; --mut: #888899; --sb: rgba(31,31,31,0.92); --bd: rgba(255,255,255,0.08); --hv: rgba(255,255,255,0.1); --ac: #9e9e9e; --kb: #1e1e2e; background: var(--bg); color: var(--text); transition: 0.25s; touch-action: pan-y; overscroll-behavior-x: none; }
     body.th-oled { --bg: #000; --text: #f5f5f5; --sub: #b0b0b0; --mut: #666; --sb: rgba(15,15,15,0.95); --bd: rgba(255,255,255,0.12); --hv: rgba(255,255,255,0.12); --ac: #fff; --kb: #000; }
     body.th-nord { --bg: #2e3440; --text: #eceff4; --sub: #d8dee9; --mut: #81a1c1; --sb: rgba(36,41,51,0.95); --bd: rgba(216,222,233,0.12); --hv: rgba(136,192,208,0.16); --ac: #88c0d0; --kb: #2e3440; }
     body.th-light { --bg: #f3f4f6; --text: #111827; --sub: #4b5563; --mut: #6b7280; --sb: rgba(255,255,255,0.95); --bd: rgba(0,0,0,0.1); --hv: rgba(0,0,0,0.07); --ac: #374151; --kb: #fff; }
     body.th-synth { --bg: #1a1025; --text: #fdf4ff; --sub: #e9d5ff; --mut: #c084fc; --sb: rgba(24,14,36,0.95); --bd: rgba(216,180,254,0.15); --hv: rgba(244,114,182,0.18); --ac: #f472b6; --kb: #1a1025; }
     body.th-matrix { --bg: #050a05; --text: #4ade80; --sub: #22c55e; --mut: #15803d; --sb: rgba(5,15,5,0.95); --bd: rgba(74,222,128,0.2); --hv: rgba(74,222,128,0.12); --ac: #4ade80; --kb: #050a05; }
-
     .wrap { min-height: 100vh; padding: 30px 20px 0; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; }
     .m-btn { position: fixed; top: 20px; left: 20px; display: inline-flex; padding: 10px; color: var(--text); border-radius: 6px; cursor: pointer; z-index: 2000; user-select: none; }
     .m-btn:hover { background: var(--hv); }
@@ -26,78 +20,125 @@
     body.menu-open .mid { transform: scaleX(0.75); }
     .bg-ov { position: fixed; inset: 0; display: none; background: rgba(0,0,0,0.35); z-index: 1000; }
     body.menu-open .bg-ov { display: block; }
-
     .sb { position: fixed; top: 0; left: 0; width: 250px; height: 100dvh; transform: translateX(-100%); background: var(--sb); backdrop-filter: blur(20px); border-right: 1px solid var(--bd); padding: 75px 0 15px; box-sizing: border-box; display: flex; flex-direction: column; overflow-y: auto; transition: transform 0.3s ease; z-index: 1500; }
     body.menu-open .sb { transform: translateX(0); }
-
     .cog-btn { position: absolute; top: 20px; right: 20px; display: inline-flex; padding: 10px; color: var(--text); border-radius: 6px; cursor: pointer; transition: background 0.2s; }
     .cog-btn:hover { background: var(--hv); }
     .cog-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; transition: transform 0.4s ease; }
     .cog-btn:hover svg { transform: rotate(60deg); }
     .cog-btn.active { background: var(--hv); color: var(--ac); }
-
     .sb a, .nav-l { position: relative; display: flex; align-items: center; padding: 15px 25px; text-decoration: none; font-size: 16px; color: var(--text); cursor: pointer; transition: 0.2s; }
     .sb a:hover, .nav-l:hover { background: var(--hv); padding-left: 29px; }
     .nav-l.active::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; background: var(--ac); }
     #nav-dev { display: none; }
     body.dev-on #nav-dev { display: flex; }
-
     .page { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 800px; }
     .page.active { display: flex; }
-
-    .sb-th { margin-top: auto; padding: 14px 25px; border-top: 1px solid var(--bd); display: flex; flex-direction: column; gap: 10px; text-align: left; }
-    .sb-th span { font-size: 12px; color: var(--mut); text-transform: uppercase; }
-    .sw-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .sw-b { display: inline-block; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--bd); cursor: pointer; transition: 0.2s; box-sizing: border-box; }
-    .sw-b.active { border-color: var(--ac); transform: scale(1.18); }
-
-    .dev-w { padding: 15px 25px; border-top: 1px solid var(--bd); display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--sub); cursor: pointer; user-select: none; }
-    .dev-w:hover { background: var(--hv); color: var(--text); }
-    .dev-t { opacity: 0; transform: translateX(-6px); transition: 0.2s; }
-    .dev-w:hover .dev-t { opacity: 1; transform: translateX(0); }
-    .sw { position: relative; width: 36px; height: 18px; }
+    .adv-hd { display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+    .adv-hd h2 { margin: 0; }
+    .adv-arw { font-size: 12px; color: var(--mut); transition: transform 0.2s; }
+    .adv-body { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.035); }
+    body.th-light .adv-body { border-top-color: rgba(0,0,0,0.04); }
+    .set-box.adv-open .adv-body { display: block; }
+    .set-box.adv-open .adv-arw { transform: rotate(180deg); }
+    .dev-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 14px; color: var(--text); cursor: pointer; user-select: none; }
+    .sw { position: relative; width: 36px; height: 18px; flex-shrink: 0; }
     .sl { position: absolute; inset: 0; border: 1.5px solid var(--ac); border-radius: 18px; transition: 0.2s; }
     .sl::before { content: ""; position: absolute; height: 10px; width: 10px; left: 3px; bottom: 2.5px; background: var(--text); border-radius: 50%; transition: 0.2s; }
     body.dev-on .sl { background: var(--ac); }
     body.dev-on .sl::before { transform: translateX(17px); background: var(--kb); }
-
-    .set-box { width: 100%; max-width: 440px; background: var(--hv); border: 1px solid var(--bd); border-radius: 8px; padding: 18px; margin-bottom: 16px; box-sizing: border-box; text-align: left; }
+    .set-box { width: 100%; max-width: 440px; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.035); border-radius: 8px; padding: 18px; margin-bottom: 16px; box-sizing: border-box; text-align: left; }
+    body.th-light .set-box { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.04); }
     .set-box h2 { font-size: 14px; text-transform: uppercase; color: var(--mut); margin: 0 0 12px; letter-spacing: 0.5px; }
     .th-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .th-card { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; border: 1px solid var(--bd); cursor: pointer; font-size: 14px; transition: 0.2s; }
+    .th-card { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.045); cursor: pointer; font-size: 14px; transition: 0.2s; }
+    body.th-light .th-card { border-color: rgba(0,0,0,0.05); }
     .th-card:hover { background: var(--hv); }
     .th-card.active { border-color: var(--ac); background: var(--hv); font-weight: 700; }
     .dot { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--bd); flex-shrink: 0; }
     .pick-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
-    .pick-row input[type="color"] { background: none; border: 1px solid var(--bd); width: 42px; height: 28px; cursor: pointer; border-radius: 4px; }
-
+    .pick-row input[type="color"] { background: none; border: 1px solid rgba(255,255,255,0.06); width: 42px; height: 28px; cursor: pointer; border-radius: 4px; }
+    body.th-light .pick-row input[type="color"] { border-color: rgba(0,0,0,0.08); }
+    .gb-form { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+    .gb-in { width: 100%; padding: 10px 12px; font-size: 14px; color: var(--text); background: var(--hv); border: 1px solid var(--bd); border-radius: 6px; box-sizing: border-box; outline: none; }
+    .gb-in:focus { border-color: var(--ac); }
+    .gb-list { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+    .gb-card { background: var(--hv); border: 1px solid var(--bd); border-radius: 8px; padding: 12px 14px; }
+    .gb-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--mut); margin-bottom: 6px; gap: 8px; }
+    .gb-meta b { color: var(--ac); font-size: 13px; }
+    .gb-msg { font-size: 14px; color: var(--text); word-break: break-word; }
+    .gb-acts { display: flex; gap: 6px; margin-top: 8px; }
+    .gb-mini { padding: 4px 10px; font-size: 12px; color: var(--sub); background: transparent; border: 1px solid var(--bd); border-radius: 4px; cursor: pointer; transition: 0.2s; }
+    .gb-mini:hover { background: var(--hv); color: var(--text); border-color: var(--ac); }
+    .gm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 560px; }
+    .gm-card { background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 18px 12px; cursor: pointer; text-align: center; transition: 0.2s; }
+    body.th-light .gm-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.06); }
+    .gm-card:hover { background: var(--hv); border-color: var(--ac); transform: translateY(-2px); }
+    .gm-card b { display: block; font-size: 16px; margin-bottom: 4px; }
+    .gm-card span { font-size: 12px; color: var(--sub); display: block; }
+    .gm-rec { margin-top: 8px; font-size: 11px; color: var(--ac); font-weight: 700; }
+    .gm-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); z-index: 2500; padding: 16px; box-sizing: border-box; }
+    .gm-modal.open { display: flex; }
+    .gm-box { position: relative; width: 100%; max-width: 390px; background: var(--bg); border: 1px solid var(--bd); border-radius: 12px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; box-shadow: 0 12px 35px rgba(0,0,0,0.45); }
+    .gm-close { position: absolute; top: 12px; right: 12px; background: transparent; border: none; color: var(--sub); font-size: 18px; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+    .gm-close:hover { background: var(--hv); color: var(--text); }
+    .gm-stats { display: flex; justify-content: space-between; width: 300px; font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    #snake-cv { background: rgba(0,0,0,0.22); border: 1px solid var(--bd); border-radius: 8px; touch-action: none; }
+    .dpad { display: grid; grid-template-columns: repeat(3, 52px); gap: 6px; margin-top: 12px; user-select: none; }
+    .dpad button { height: 46px; font-size: 16px; color: var(--text); background: var(--hv); border: 1px solid var(--bd); border-radius: 6px; cursor: pointer; }
+    .dpad button:active { background: var(--ac); color: var(--kb); }
+    #react-box { width: 100%; max-width: 340px; height: 190px; border-radius: 10px; border: 1px solid var(--bd); background: var(--hv); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; cursor: pointer; user-select: none; transition: background 0.15s; }
+    #react-box.wait { background: rgba(239,68,68,0.22); border-color: #ef4444; }
+    #react-box.go { background: rgba(34,197,94,0.28); border-color: #22c55e; }
+    #react-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    #react-sub { font-size: 13px; color: var(--sub); }
+    .ttt-roles { display: flex; gap: 8px; margin-bottom: 10px; width: 100%; justify-content: center; }
+    .ttt-role { flex: 1; padding: 8px; font-size: 12px; color: var(--text); background: var(--hv); border: 1px solid var(--bd); border-radius: 6px; cursor: pointer; }
+    .ttt-role.picked { border-color: var(--ac); font-weight: 700; }
+    .ttt-grid { display: grid; grid-template-columns: repeat(3, 84px); gap: 8px; margin: 10px 0; }
+    .ttt-cell { height: 84px; font-size: 32px; font-weight: 700; color: var(--text); background: var(--hv); border: 1px solid var(--bd); border-radius: 8px; cursor: pointer; }
+    .ttt-cell:hover { border-color: var(--ac); }
     h1 { font-size: 20px; font-weight: 700; margin: 0 0 12px; }
     p { font-size: 14px; margin: 0 0 15px; color: var(--sub); }
     .btns { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
     #links-page .btns { flex-direction: column; align-items: center; }
-    .btns button, .btns a { padding: 10px 16px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; background: transparent; border: none; border-radius: 6px; cursor: pointer; transition: 0.25s; box-sizing: border-box; }
+    .btns button, .btns a { padding: 10px 16px; font-size: 14px; font-weight: 500; color: var(--text); text-decoration: none; background: transparent; border: 1px solid transparent; outline: none; border-radius: 6px; cursor: pointer; transition: 0.25s; box-sizing: border-box; }
     #links-page a { width: 180px; }
-    #dev-page button, #settings-page button { min-width: 180px; background: var(--hv); border: 1px solid var(--bd); }
-    .btns button:hover, .btns a:hover { background: var(--hv); transform: translateY(-2px); }
+    #dev-page button, #settings-page button { min-width: 140px; background: transparent; border: 1px solid transparent; outline: none; }
+    #guestbook-page .btns button, .gm-box .btns button, .clip-box .btns button { min-width: 120px; background: var(--hv); border: 1px solid var(--bd); }
+    .btns button:hover, .btns a:hover, #dev-page button:hover, #settings-page button:hover { background: var(--hv); border-color: var(--bd); transform: translateY(-2px); }
     footer { margin-top: auto; padding: 20px; font-size: 13px; font-weight: 300; color: var(--mut); }
     body.is-mobile .wrap { padding-top: 70px; }
     body.is-mobile h1 { font-size: 18px; line-height: 1.4; }
     body.is-mobile .btns { flex-direction: column; width: 100%; max-width: 300px; }
     body.is-mobile .btns button, body.is-mobile .btns a, body.is-mobile #links-page a { width: 100%; padding: 14px 16px; background: var(--hv); border: 1px solid var(--bd); }
-    body.is-mobile .dev-t { opacity: 1; transform: translateX(0); }
-    body.is-mobile .th-grid { grid-template-columns: 1fr; }
+    body.is-mobile #dev-page button, body.is-mobile #settings-page button { background: transparent; border: 1px solid transparent; }
+    body.is-mobile .th-grid, body.is-mobile .gm-grid { grid-template-columns: 1fr; }
   </style>
   <script>
     var ico = document.createElement("link");
     ico.rel = "icon"; ico.type = "image/png"; ico.href = "fox" + ".png";
     document.head.appendChild(ico);
-
+    var EXT_LINKS = {
+      "lnk-about": ["https:", "//youtube", ".com"].join(""),
+      "lnk-google": ["https:", "//google", ".com"].join(""),
+      "lnk-ow": ["https:", "//playoverwatch", ".com"].join(""),
+      "lnk-nogwater": ["https:", "//m3.nogwater", ".dev"].join(""),
+      "lnk-discord": ["https:", "//discord", ".com"].join(""),
+      "lnk-github": ["https:", "//github", ".com/downdy/Lathgate.gg"].join("")
+    };
     var THEMES = ["default", "oled", "nord", "light", "synth", "matrix"];
     function setStore(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
     function getStore(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
-
+    function syncPlayerName(val) {
+      setStore("lathgate_gb_name", val);
+      var g1 = document.getElementById("gb-name"), g2 = document.getElementById("gm-name");
+      if (g1 && g1.value !== val) g1.value = val;
+      if (g2 && g2.value !== val) g2.value = val;
+    }
     function pickPage(page) {
-      ["home", "links", "dev", "settings"].forEach(function(p) {
+      closeGamePopup();
+      ["home", "links", "guestbook", "games", "dev", "settings"].forEach(function(p) {
         var pageEl = document.getElementById(p + "-page");
         var navEl = document.getElementById("nav-" + p);
         if (pageEl) pageEl.classList.toggle("active", p === page);
@@ -105,35 +146,33 @@
       });
       setStore("lathgate_page", page);
       document.body.classList.remove("menu-open");
+      if (page === "guestbook") loadNotes();
+      if (page === "games") loadScores();
+      if (page === "dev") { detectDevice(); loadClip(); }
     }
-
     function pickTheme(theme) {
       THEMES.forEach(function(t) { document.body.classList.remove("th-" + t); });
       if (theme !== "default") document.body.classList.add("th-" + theme);
       THEMES.forEach(function(t) {
-        var b1 = document.getElementById("b-" + t);
         var b2 = document.getElementById("card-" + t);
-        if (b1) b1.classList.toggle("active", t === theme);
         if (b2) b2.classList.toggle("active", t === theme);
       });
-      document.body.style.removeProperty("--bg");
-      document.body.style.removeProperty("--ac");
+      document.body.style.removeProperty("--bg"); document.body.style.removeProperty("--ac");
       try { localStorage.removeItem("lathgate_custom_--bg"); localStorage.removeItem("lathgate_custom_--ac"); } catch (e) {}
       setStore("lathgate_theme", theme);
+      drawSnake();
     }
-
     function setCustomColor(prop, val) {
       document.body.style.setProperty(prop, val);
       setStore("lathgate_custom_" + prop, val);
+      drawSnake();
     }
-
     function toggleDev(force) {
       var isOn = typeof force === "boolean" ? force : !document.body.classList.contains("dev-on");
       document.body.classList.toggle("dev-on", isOn);
       setStore("lathgate_dev", isOn);
       if (!isOn && document.getElementById("dev-page").classList.contains("active")) pickPage("home");
     }
-
     function detectDevice() {
       var info = document.getElementById("dev-device-info");
       var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
@@ -141,14 +180,231 @@
       document.body.classList.toggle("is-desktop", !isMobile);
       if (info) info.textContent = "Device Info: " + (isMobile ? "Mobile" : "Desktop") + " (" + window.innerWidth + "x" + window.innerHeight + "px)";
     }
-
+    function loadClip() {
+      fetch("/api/clip").then(function(r) { return r.json(); }).then(function(d) {
+        var box = document.getElementById("dev-clip");
+        var st = document.getElementById("clip-status");
+        if (box) box.value = d.text || "";
+        if (st) st.textContent = d.time ? ("Last updated: " + d.time) : "Shared LAN clipboard ready";
+      }).catch(function() {});
+    }
+    function saveClip() {
+      var box = document.getElementById("dev-clip");
+      if (!box) return;
+      fetch("/api/clip", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: box.value }) })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var st = document.getElementById("clip-status");
+          if (st) st.textContent = "Sent to LAN (" + (d.time || "just now") + ")";
+        });
+    }
+    function copyClip() {
+      var box = document.getElementById("dev-clip");
+      var st = document.getElementById("clip-status");
+      if (!box) return;
+      box.select();
+      try { navigator.clipboard.writeText(box.value); } catch (e) { document.execCommand("copy"); }
+      if (st) st.textContent = "Copied to device clipboard!";
+    }
+    function renderNotes(items) {
+      var list = document.getElementById("gb-list");
+      if (!list) return;
+      list.innerHTML = "";
+      if (!items || !items.length) { list.innerHTML = "<p style='text-align:center'>No notes yet. Leave the first message!</p>"; return; }
+      items.forEach(function(it) {
+        var card = document.createElement("div"); card.className = "gb-card";
+        var meta = document.createElement("div"); meta.className = "gb-meta";
+        var b = document.createElement("b"); b.textContent = it.name || "Anonymous";
+        var sp = document.createElement("span"); sp.textContent = it.time || "";
+        meta.appendChild(b); meta.appendChild(sp);
+        var msg = document.createElement("div"); msg.className = "gb-msg"; msg.textContent = it.msg || "";
+        card.appendChild(meta); card.appendChild(msg);
+        if (it.id) {
+          var acts = document.createElement("div"); acts.className = "gb-acts";
+          var editBtn = document.createElement("button"); editBtn.type = "button"; editBtn.className = "gb-mini"; editBtn.textContent = "Edit";
+          editBtn.onclick = function() { startEditNote(card, msg, acts, it); };
+          var delBtn = document.createElement("button"); delBtn.type = "button"; delBtn.className = "gb-mini"; delBtn.textContent = "Delete";
+          delBtn.onclick = function() { deleteNote(it.id); };
+          acts.appendChild(editBtn); acts.appendChild(delBtn); card.appendChild(acts);
+        }
+        list.appendChild(card);
+      });
+    }
+    function startEditNote(card, msgEl, actsEl, it) {
+      var ta = document.createElement("textarea"); ta.className = "gb-in"; ta.rows = 2; ta.maxLength = 280; ta.value = it.msg || "";
+      ta.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); saveEditNote(it.id, ta.value); }
+        else if (e.key === "Escape") loadNotes();
+      });
+      var editActs = document.createElement("div"); editActs.className = "gb-acts";
+      var saveBtn = document.createElement("button"); saveBtn.type = "button"; saveBtn.className = "gb-mini"; saveBtn.textContent = "Save";
+      saveBtn.onclick = function() { saveEditNote(it.id, ta.value); };
+      var cancelBtn = document.createElement("button"); cancelBtn.type = "button"; cancelBtn.className = "gb-mini"; cancelBtn.textContent = "Cancel";
+      cancelBtn.onclick = function() { loadNotes(); };
+      editActs.appendChild(saveBtn); editActs.appendChild(cancelBtn);
+      card.replaceChild(ta, msgEl); card.replaceChild(editActs, actsEl); ta.focus();
+    }
+    function saveEditNote(id, newMsg) {
+      var trimmed = newMsg.trim(); if (!trimmed) return;
+      fetch("/api/guestbook", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: id, msg: trimmed }) }).then(function(r) { return r.json(); }).then(renderNotes);
+    }
+    function deleteNote(id) {
+      fetch("/api/guestbook", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: id }) }).then(function(r) { return r.json(); }).then(renderNotes);
+    }
+    function loadNotes() {
+      fetch("/api/guestbook").then(function(r) { return r.json(); }).then(renderNotes).catch(function() {
+        var list = document.getElementById("gb-list"); if (list) list.innerHTML = "<p style='text-align:center'>Start tray-server.ps1 to use the LAN Guestbook.</p>";
+      });
+    }
+    function postNote() {
+      var nEl = document.getElementById("gb-name"), mEl = document.getElementById("gb-msg");
+      var name = nEl.value.trim() || "Anonymous", msg = mEl.value.trim(); if (!msg) return;
+      syncPlayerName(name);
+      fetch("/api/guestbook", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, msg: msg }) }).then(function(r) { return r.json(); }).then(function(data) { mEl.value = ""; renderNotes(data); });
+    }
+    function getPlayerName() {
+      var g1 = document.getElementById("gm-name"), g2 = document.getElementById("gb-name");
+      return (g1 && g1.value.trim()) || (g2 && g2.value.trim()) || getStore("lathgate_gb_name") || "Anonymous";
+    }
+    function renderScores(sc) {
+      if (!sc) return;
+      if (sc.snake) {
+        var sTxt = sc.snake.val > 0 ? (sc.snake.val + " (" + sc.snake.name + ")") : "0";
+        document.getElementById("snk-best").textContent = "LAN Best: " + sTxt;
+        document.getElementById("card-snk-rec").textContent = "LAN Record: " + sTxt;
+      }
+      if (sc.react) {
+        var rTxt = sc.react.val < 9999 ? (sc.react.val + " ms (" + sc.react.name + ")") : "-- ms";
+        document.getElementById("rct-best").textContent = "LAN Best: " + rTxt;
+        document.getElementById("card-rct-rec").textContent = "LAN Record: " + rTxt;
+      }
+    }
+    function loadScores() { fetch("/api/scores").then(function(r) { return r.json(); }).then(renderScores).catch(function() {}); }
+    function submitScore(game, val) {
+      var player = getPlayerName(); syncPlayerName(player);
+      fetch("/api/scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ game: game, name: player, val: val }) }).then(function(r) { return r.json(); }).then(renderScores).catch(function() {});
+    }
+    var activeGame = null, tttPoll = null, myTttSide = "";
+    function openGamePopup(g) {
+      closeGamePopup();
+      activeGame = g;
+      loadScores();
+      var m = document.getElementById("modal-" + g);
+      if (m) m.classList.add("open");
+      if (g === "snake") drawSnake("Press Start or Arrow Key");
+      if (g === "ttt") { loadTtt(); tttPoll = setInterval(loadTtt, 1200); }
+    }
+    function closeGamePopup() {
+      activeGame = null;
+      clearInterval(snk.timer); snk.running = false;
+      clearTimeout(rct.to); clearInterval(tttPoll);
+      ["snake", "react", "ttt"].forEach(function(id) {
+        var m = document.getElementById("modal-" + id);
+        if (m) m.classList.remove("open");
+      });
+    }
+    var snk = { body: [{x:7,y:7},{x:6,y:7},{x:5,y:7}], dir: {x:1,y:0}, next: {x:1,y:0}, food: {x:11,y:7}, score: 0, timer: null, running: false };
+    function setSnakeDir(dx, dy) {
+      if (snk.dir.x === -dx && snk.dir.y === -dy) return;
+      snk.next = { x: dx, y: dy };
+      if (!snk.running) startSnake();
+    }
+    function startSnake() {
+      clearInterval(snk.timer);
+      snk.body = [{x:7,y:7},{x:6,y:7},{x:5,y:7}];
+      snk.dir = {x:1,y:0}; snk.next = {x:1,y:0}; snk.score = 0; snk.running = true;
+      snk.food = { x: Math.floor(Math.random() * 15), y: Math.floor(Math.random() * 15) };
+      document.getElementById("snk-score").textContent = "Score: 0";
+      snk.timer = setInterval(stepSnake, 130); drawSnake();
+    }
+    function stepSnake() {
+      snk.dir = snk.next;
+      var head = { x: snk.body.at(0).x + snk.dir.x, y: snk.body.at(0).y + snk.dir.y };
+      if (head.x < 0 || head.x >= 15 || head.y < 0 || head.y >= 15 || snk.body.some(function(s) { return s.x === head.x && s.y === head.y; })) {
+        clearInterval(snk.timer); snk.running = false;
+        if (snk.score > 0) submitScore("snake", snk.score);
+        drawSnake("Game Over! Press Start"); return;
+      }
+      snk.body.unshift(head);
+      if (head.x === snk.food.x && head.y === snk.food.y) {
+        snk.score += 10; document.getElementById("snk-score").textContent = "Score: " + snk.score;
+        snk.food = { x: Math.floor(Math.random() * 15), y: Math.floor(Math.random() * 15) };
+      } else { snk.body.pop(); }
+      drawSnake();
+    }
+    function drawSnake(msg) {
+      var cv = document.getElementById("snake-cv"); if (!cv) return;
+      var ctx = cv.getContext("2d"), cs = getComputedStyle(document.body);
+      var ac = cs.getPropertyValue("--ac").trim() || "#9e9e9e", tx = cs.getPropertyValue("--text").trim() || "#ffffff";
+      ctx.clearRect(0, 0, 300, 300);
+      ctx.fillStyle = "#f43f5e"; ctx.fillRect(snk.food.x * 20 + 3, snk.food.y * 20 + 3, 14, 14);
+      snk.body.forEach(function(s, i) { ctx.fillStyle = i === 0 ? tx : ac; ctx.fillRect(s.x * 20 + 2, s.y * 20 + 2, 16, 16); });
+      if (msg) {
+        ctx.fillStyle = "rgba(0,0,0,0.65)"; ctx.fillRect(0, 120, 300, 60);
+        ctx.fillStyle = "#ffffff"; ctx.font = "bold 16px sans-serif"; ctx.textAlign = "center"; ctx.fillText(msg, 150, 155);
+      }
+    }
+    var rct = { state: "idle", t0: 0, to: null };
+    function clickReact() {
+      var box = document.getElementById("react-box"), ti = document.getElementById("react-title"), su = document.getElementById("react-sub");
+      if (rct.state === "idle" || rct.state === "done") {
+        rct.state = "wait"; box.className = "wait"; ti.textContent = "Wait for Green..."; su.textContent = "Do not click yet";
+        rct.to = setTimeout(function() { rct.state = "go"; rct.t0 = performance.now(); box.className = "go"; ti.textContent = "CLICK NOW!"; su.textContent = "Tap as fast as you can!"; }, 1200 + Math.random() * 2500);
+      } else if (rct.state === "wait") {
+        clearTimeout(rct.to); rct.state = "done"; box.className = ""; ti.textContent = "Too Early!"; su.textContent = "Click to try again";
+      } else if (rct.state === "go") {
+        var ms = Math.round(performance.now() - rct.t0); rct.state = "done"; box.className = "";
+        submitScore("react", ms); ti.textContent = ms + " ms"; su.textContent = "Click to play again";
+      }
+    }
+    function renderTtt(st) {
+      if (!st || !st.board) return;
+      document.getElementById("ttt-btn-x").textContent = "X: " + (st.pX || "Join as X");
+      document.getElementById("ttt-btn-o").textContent = "O: " + (st.pO || "Join as O");
+      document.getElementById("ttt-btn-x").classList.toggle("picked", myTttSide === "X");
+      document.getElementById("ttt-btn-o").classList.toggle("picked", myTttSide === "O");
+      var status = document.getElementById("ttt-status");
+      if (st.winner === "Draw") status.textContent = "Match Draw!";
+      else if (st.winner) status.textContent = "Winner: " + st.winner + " (" + (st.winner === "X" ? (st.pX || "X") : (st.pO || "O")) + ")!";
+      else status.textContent = "Turn: " + st.turn + (myTttSide ? " (You are " + myTttSide + ")" : " (Pick X or O)");
+      for (var i = 0; i < 9; i++) {
+        var cell = document.getElementById("ttt-c" + i);
+        if (cell) cell.textContent = st.board.at(i) || "";
+      }
+    }
+    function loadTtt() { fetch("/api/ttt").then(function(r) { return r.json(); }).then(renderTtt).catch(function() {}); }
+    function joinTtt(side) {
+      myTttSide = side; var p = getPlayerName(); syncPlayerName(p);
+      fetch("/api/ttt", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "join", side: side, name: p }) }).then(function(r) { return r.json(); }).then(renderTtt);
+    }
+    function moveTtt(idx) {
+      if (!myTttSide) { document.getElementById("ttt-status").textContent = "Pick X or O first!"; return; }
+      fetch("/api/ttt", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "move", side: myTttSide, idx: idx }) }).then(function(r) { return r.json(); }).then(renderTtt);
+    }
+    function resetTtt() {
+      fetch("/api/ttt", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "reset" }) }).then(function(r) { return r.json(); }).then(renderTtt);
+    }
+    window.addEventListener("keydown", function(e) {
+      if (e.key === "Escape" && activeGame) { closeGamePopup(); return; }
+      if (activeGame !== "snake") return;
+      var k = e.key.toLowerCase();
+      if (k === "arrowup" || k === "w") { e.preventDefault(); setSnakeDir(0, -1); }
+      else if (k === "arrowdown" || k === "s") { e.preventDefault(); setSnakeDir(0, 1); }
+      else if (k === "arrowleft" || k === "a") { e.preventDefault(); setSnakeDir(-1, 0); }
+      else if (k === "arrowright" || k === "d") { e.preventDefault(); setSnakeDir(1, 0); }
+    });
     window.addEventListener("DOMContentLoaded", function() {
+      Object.keys(EXT_LINKS).forEach(function(id) { var el = document.getElementById(id); if (el) el.href = EXT_LINKS[id]; });
+      var savedName = getStore("lathgate_gb_name"); if (savedName) syncPlayerName(savedName);
+      var msgBox = document.getElementById("gb-msg");
+      if (msgBox) msgBox.addEventListener("keydown", function(e) { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); postNote(); } });
+      loadScores();
       var t = getStore("lathgate_theme"); if (t) pickTheme(t);
-      var cBg = getStore("lathgate_custom_--bg");
-      var cAc = getStore("lathgate_custom_--ac");
+      var cBg = getStore("lathgate_custom_--bg"), cAc = getStore("lathgate_custom_--ac");
       if (cBg) { document.body.style.setProperty("--bg", cBg); document.getElementById("cp-bg").value = cBg; }
       if (cAc) { document.body.style.setProperty("--ac", cAc); document.getElementById("cp-ac").value = cAc; }
       var d = getStore("lathgate_dev") === "true"; toggleDev(d);
+      if (d) { var adv = document.getElementById("adv-box"); if (adv) adv.classList.add("adv-open"); }
       var p = getStore("lathgate_page"); if (p && (p !== "dev" || d)) pickPage(p);
       detectDevice();
     });
@@ -166,36 +422,90 @@
     </div>
     <div id="nav-home" class="nav-l active" onclick="pickPage('home')">Home</div>
     <div id="nav-links" class="nav-l" onclick="pickPage('links')">Friends &amp; Links</div>
-    <a href="https://youtube.com" target="_blank" onclick="document.body.classList.remove('menu-open')">About &amp; Contact</a>
+    <div id="nav-guestbook" class="nav-l" onclick="pickPage('guestbook')">LAN Guestbook</div>
+    <div id="nav-games" class="nav-l" onclick="pickPage('games')">Games</div>
+    <a id="lnk-about" target="_blank" onclick="document.body.classList.remove('menu-open')">About &amp; Contact</a>
     <div id="nav-dev" class="nav-l" onclick="pickPage('dev')">Dev Tools</div>
-    <div class="sb-th">
-      <span>Quick Theme</span>
-      <div class="sw-row">
-        <span id="b-default" class="sw-b active" style="background:#1e1e2e" title="Default Dark" onclick="pickTheme('default')"></span>
-        <span id="b-oled" class="sw-b" style="background:#000000" title="Midnight OLED" onclick="pickTheme('oled')"></span>
-        <span id="b-nord" class="sw-b" style="background:#2e3440" title="Nord Frost" onclick="pickTheme('nord')"></span>
-        <span id="b-light" class="sw-b" style="background:#f3f4f6" title="Clean Light" onclick="pickTheme('light')"></span>
-        <span id="b-synth" class="sw-b" style="background:#1a1025" title="Sunset Synth" onclick="pickTheme('synth')"></span>
-        <span id="b-matrix" class="sw-b" style="background:#050a05" title="Matrix Terminal" onclick="pickTheme('matrix')"></span>
-      </div>
-    </div>
-    <div class="dev-w" onclick="toggleDev()"><span class="sw"><span class="sl"></span></span><span class="dev-t">Dev Mode</span></div>
   </div>
   <div class="wrap">
     <div id="home-page" class="page active">
       <h1> welcome to Lathgate.gg ! </h1>
       <p>this is a string of test text</p>
       <div class="btns">
-        <a href="https://google.com" target="_blank">Go to Google</a>
-        <a href="https://playoverwatch.com" target="_blank">The Overwatch Button!</a>
+        <a id="lnk-google" target="_blank">Go to Google</a>
+        <a id="lnk-ow" target="_blank">The Overwatch Button!</a>
         <button type="button" onclick="alert(' dummy. string ')">Dummy.button</button>
       </div>
     </div>
     <div id="links-page" class="page">
       <h1>Friends &amp; Links</h1>
       <div class="btns">
-        <a href="https://example.com" target="_blank">Nogwater`s website</a>
-        <a href="https://discord.com" target="_blank">Discord!</a>
+        <a id="lnk-nogwater" target="_blank">Nogwater's website</a>
+        <a id="lnk-discord" target="_blank">Discord!</a>
+        <a id="lnk-github" target="_blank">GitHub</a>
+      </div>
+    </div>
+    <div id="guestbook-page" class="page">
+      <h1>LAN Guestbook</h1>
+      <p>Leave a note for everyone on the network (Press Enter to post)</p>
+      <div class="gb-form">
+        <input type="text" id="gb-name" class="gb-in" placeholder="Your name (e.g. Lathgate)" maxlength="24" oninput="syncPlayerName(this.value)">
+        <textarea id="gb-msg" class="gb-in" rows="3" placeholder="Write a message... (Enter to post, Shift+Enter for new line)" maxlength="280"></textarea>
+        <div class="btns"><button type="button" onclick="postNote()">Post Note</button><button type="button" onclick="loadNotes()">Refresh Wall</button></div>
+      </div>
+      <div id="gb-list" class="gb-list"></div>
+    </div>
+    <div id="games-page" class="page">
+      <h1>Games</h1>
+      <p>Pick a game to open it in a popup</p>
+      <div class="gb-form" style="max-width:300px;margin-bottom:14px;">
+        <input type="text" id="gm-name" class="gb-in" placeholder="Player Name (e.g. Lathgate)" maxlength="24" oninput="syncPlayerName(this.value)">
+      </div>
+      <div class="gm-grid">
+        <div class="gm-card" onclick="openGamePopup('snake')"><b>Snake</b><span>Classic grid arcade</span><div id="card-snk-rec" class="gm-rec">LAN Record: 0</div></div>
+        <div class="gm-card" onclick="openGamePopup('react')"><b>Reaction Timer</b><span>Test your reflexes</span><div id="card-rct-rec" class="gm-rec">LAN Record: -- ms</div></div>
+        <div class="gm-card" onclick="openGamePopup('ttt')"><b>LAN Tic-Tac-Toe</b><span>2-player live on Wi-Fi</span><div class="gm-rec">Live Multiplayer</div></div>
+      </div>
+    </div>
+    <div id="modal-snake" class="gm-modal" onclick="if(event.target===this)closeGamePopup()">
+      <div class="gm-box">
+        <button type="button" class="gm-close" onclick="closeGamePopup()">&#10005;</button>
+        <h1>Snake</h1>
+        <div class="gm-stats"><span id="snk-score">Score: 0</span><span id="snk-best">LAN Best: 0</span></div>
+        <canvas id="snake-cv" width="300" height="300"></canvas>
+        <div class="dpad"><span></span><button type="button" onclick="setSnakeDir(0,-1)">&#9650;</button><span></span><button type="button" onclick="setSnakeDir(-1,0)">&#9664;</button><button type="button" onclick="startSnake()">&#9654;</button><button type="button" onclick="setSnakeDir(1,0)">&#9654;</button><span></span><button type="button" onclick="setSnakeDir(0,1)">&#9660;</button><span></span></div>
+        <div class="btns" style="margin-top:12px;"><button type="button" onclick="startSnake()">Start / Restart</button></div>
+      </div>
+    </div>
+    <div id="modal-react" class="gm-modal" onclick="if(event.target===this)closeGamePopup()">
+      <div class="gm-box">
+        <button type="button" class="gm-close" onclick="closeGamePopup()">&#10005;</button>
+        <h1>Reaction Timer</h1>
+        <p id="rct-best">LAN Best: -- ms</p>
+        <div id="react-box" onclick="clickReact()"><div id="react-title">Click to Start</div><div id="react-sub">Tap as soon as the box turns green</div></div>
+      </div>
+    </div>
+    <div id="modal-ttt" class="gm-modal" onclick="if(event.target===this)closeGamePopup()">
+      <div class="gm-box">
+        <button type="button" class="gm-close" onclick="closeGamePopup()">&#10005;</button>
+        <h1>LAN Tic-Tac-Toe</h1>
+        <div class="ttt-roles">
+          <button type="button" id="ttt-btn-x" class="ttt-role" onclick="joinTtt('X')">X: Join as X</button>
+          <button type="button" id="ttt-btn-o" class="ttt-role" onclick="joinTtt('O')">O: Join as O</button>
+        </div>
+        <p id="ttt-status" style="margin-bottom:6px;">Pick X or O to join</p>
+        <div class="ttt-grid">
+          <button type="button" id="ttt-c0" class="ttt-cell" onclick="moveTtt(0)"></button>
+          <button type="button" id="ttt-c1" class="ttt-cell" onclick="moveTtt(1)"></button>
+          <button type="button" id="ttt-c2" class="ttt-cell" onclick="moveTtt(2)"></button>
+          <button type="button" id="ttt-c3" class="ttt-cell" onclick="moveTtt(3)"></button>
+          <button type="button" id="ttt-c4" class="ttt-cell" onclick="moveTtt(4)"></button>
+          <button type="button" id="ttt-c5" class="ttt-cell" onclick="moveTtt(5)"></button>
+          <button type="button" id="ttt-c6" class="ttt-cell" onclick="moveTtt(6)"></button>
+          <button type="button" id="ttt-c7" class="ttt-cell" onclick="moveTtt(7)"></button>
+          <button type="button" id="ttt-c8" class="ttt-cell" onclick="moveTtt(8)"></button>
+        </div>
+        <div class="btns" style="margin-top:10px;"><button type="button" onclick="resetTtt()">Reset Match</button></div>
       </div>
     </div>
     <div id="settings-page" class="page">
@@ -218,17 +528,55 @@
         <div class="pick-row"><span>Accent Color</span><input type="color" id="cp-ac" value="#9e9e9e" oninput="setCustomColor('--ac', this.value)"></div>
         <div class="btns" style="margin-top:10px;"><button type="button" onclick="document.body.style.removeProperty('--bg'); document.body.style.removeProperty('--ac'); try{localStorage.removeItem('lathgate_custom_--bg'); localStorage.removeItem('lathgate_custom_--ac');}catch(e){} document.getElementById('cp-bg').value='#1e1e2e'; document.getElementById('cp-ac').value='#9e9e9e';">Reset Custom Colors</button></div>
       </div>
+      <div id="adv-box" class="set-box">
+        <div class="adv-hd" onclick="document.getElementById('adv-box').classList.toggle('adv-open')"><h2>Advanced</h2><span class="adv-arw">&#9660;</span></div>
+        <div class="adv-body"><div class="dev-row" onclick="toggleDev()"><span>Dev Mode</span><span class="sw"><span class="sl"></span></span></div></div>
+      </div>
     </div>
     <div id="dev-page" class="page">
       <h1>Dev Tools</h1>
       <p>Local host testing utilities</p>
       <p id="dev-device-info">Device Info: Loading...</p>
-      <div class="btns">
-        <button type="button" onclick="location.reload()">Refresh Now</button>
-        <button type="button" onclick="try{localStorage.clear();}catch(e){} location.reload();">Reset Saved Settings</button>
+      <div class="set-box clip-box">
+        <h2>LAN Clipboard</h2>
+        <p id="clip-status" style="font-size:12px;margin-bottom:8px;">Shared LAN clipboard ready</p>
+        <textarea id="dev-clip" class="gb-in" rows="4" placeholder="Paste links, commands, or notes to share across your PC and phone..."></textarea>
+        <div class="btns" style="margin-top:10px;">
+          <button type="button" onclick="saveClip()">Send to LAN</button>
+          <button type="button" onclick="loadClip()">Fetch</button>
+          <button type="button" onclick="copyClip()">Copy</button>
+        </div>
       </div>
+      <div class="btns"><button type="button" onclick="location.reload()">Refresh Now</button><button type="button" onclick="try{localStorage.clear();}catch(e){} location.reload();">Reset Saved Settings</button></div>
     </div>
     <footer>crafted with goldfish crackers, patience, and a whole lot of advanced copy pasting</footer>
   </div>
+  <script>
+    (function() {
+      var sb = document.getElementById("sidebar"), sx = 0, sy = 0, dragging = false, wasOpen = false;
+      document.addEventListener("touchstart", function(e) {
+        if (e.touches.length !== 1) return;
+        sx = e.touches.item(0).clientX; sy = e.touches.item(0).clientY;
+        wasOpen = document.body.classList.contains("menu-open");
+        if (wasOpen || sx <= 75) { dragging = true; sb.style.transition = "none"; }
+      }, { passive: true });
+      document.addEventListener("touchmove", function(e) {
+        if (!dragging) return;
+        var dx = e.touches.item(0).clientX - sx, dy = e.touches.item(0).clientY - sy;
+        if (Math.abs(dy) > Math.abs(dx) && Math.abs(dx) < 12) { dragging = false; sb.style.transition = ""; sb.style.transform = ""; return; }
+        var offset = wasOpen ? Math.min(0, Math.max(-250, dx)) : Math.min(0, Math.max(-250, -250 + dx));
+        sb.style.transform = "translateX(" + offset + "px)";
+      }, { passive: true });
+      document.addEventListener("touchend", function(e) {
+        if (!dragging) return;
+        dragging = false;
+        var dx = e.changedTouches.item(0).clientX - sx;
+        sb.style.transition = ""; sb.style.transform = "";
+        if (!wasOpen && dx > 55) document.body.classList.add("menu-open");
+        else if (wasOpen && dx < -55) document.body.classList.remove("menu-open");
+      });
+    })();
+  </script>
 </body>
 </html>
+
